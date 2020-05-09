@@ -23,6 +23,7 @@ namespace Hotfolder2Database
         private void b_Start_Click(object sender, EventArgs e)
         {
             Logger logForm = new Logger();
+            this.Hide();
             logForm.ShowDialog();
             this.Close();
         }
@@ -34,10 +35,35 @@ namespace Hotfolder2Database
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.Title = "Select a database (*.db) file";
                 dialog.Filter = "Database files (*.db)|*.db";
+                dialog.InitialDirectory = SettingsManager.GetDefaultDatabasePath();
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     SettingsManager.SetDatabase(dialog.FileName);
-                    // TODO: Broadcast and update UI elements
+                    l_DatabasePath.Text = SettingsManager.GetDatabasePath();
+                    tb_DatabasePath.Text = SettingsManager.GetDatabasePath();
+                    tb_DatabasePath.ForeColor = Color.Black;
+                    CheckStartConditions();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void b_openFolder_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FolderBrowserDialog dialog = new FolderBrowserDialog();
+                dialog.ShowNewFolderButton = true;
+                dialog.Description = "Select a folder to monitor";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    SettingsManager.SetHotfolder(dialog.SelectedPath);
+                    tb_hotfolderPath.Text = SettingsManager.GetHotfolder();
+                    tb_hotfolderPath.ForeColor = Color.Black;
+                    CheckStartConditions();
                 }
             }
             catch (Exception ex)
@@ -56,7 +82,11 @@ namespace Hotfolder2Database
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     SettingsManager.SetDatabase(dialog.FileName);
-                    // TODO: Broadcast and update UI elements
+                    File.Create(dialog.FileName);
+                    // TODO: Create actual file
+                    // TODO: Set up database
+
+                    CheckStartConditions();
                 }
             }
             catch (Exception ex)
@@ -71,6 +101,8 @@ namespace Hotfolder2Database
                 SettingsManager.AddFileType(e.Item.Text.ToLower());
             else
                 SettingsManager.RemoveFileType(e.Item.Text.ToLower());
+
+            CheckStartConditions();
         }
 
         private void PreloadUIValues()
@@ -93,12 +125,13 @@ namespace Hotfolder2Database
 
         private void CheckStartConditions()
         {
-            bool hasAcceptedFileTypes = SettingsManager.GetAcceptedFileTypes().Count > 0;
+            bool hasAcceptedFileTypes = SettingsManager.GetAcceptedFileTypes() != null && !SettingsManager.GetAcceptedFileTypes()[0].Equals("");
             bool hasSelectedDatabase = (!string.IsNullOrEmpty(SettingsManager.GetDatabasePath()) && File.Exists(SettingsManager.GetDatabasePath()));
+            bool hasSelectedHotfolder = (!string.IsNullOrEmpty(SettingsManager.GetHotfolder()) && Directory.Exists(SettingsManager.GetHotfolder()));
             if (hasAcceptedFileTypes)
             {
                 l_imageStatus.ForeColor = Color.Black;
-                l_imageStatus.Text = "Image type(s) seleced";
+                l_imageStatus.Text = "Image type(s) selected";
             }
             else
             {
@@ -117,7 +150,18 @@ namespace Hotfolder2Database
                 l_databaseStatus.Text = "Database not selected";
             }
 
-            if (hasSelectedDatabase && hasAcceptedFileTypes)
+            if (hasSelectedHotfolder)
+            {
+                l_hotfolderStatus.ForeColor = Color.Black;
+                l_hotfolderStatus.Text = "Hotfolder selected";
+            }
+            else
+            {
+                l_hotfolderStatus.ForeColor = Color.Red;
+                l_hotfolderStatus.Text = "Hotfolder not selected";
+            }
+
+            if (hasSelectedDatabase && hasAcceptedFileTypes && hasSelectedHotfolder)
             {
                 b_Start.Enabled = true;
                 b_Start.BackColor = Color.Green;

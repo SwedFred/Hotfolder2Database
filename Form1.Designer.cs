@@ -37,13 +37,17 @@
             this.l_ValidTypes = new System.Windows.Forms.Label();
             this.tb_DatabasePath = new System.Windows.Forms.TextBox();
             this.l_databaseStatus = new System.Windows.Forms.Label();
-            this.b_addDatabase = new System.Windows.Forms.Button();
-            this.pb_databaseStatus = new System.Windows.Forms.PictureBox();
-            this.b_databaseSearch = new System.Windows.Forms.Button();
             this.l_DatabasePath = new System.Windows.Forms.Label();
             this.l_instruction = new System.Windows.Forms.Label();
             this.l_Title = new System.Windows.Forms.Label();
             this.l_imageStatus = new System.Windows.Forms.Label();
+            this.tb_hotfolderPath = new System.Windows.Forms.TextBox();
+            this.l_hotfolderPath = new System.Windows.Forms.Label();
+            this.b_databaseSearch = new System.Windows.Forms.Button();
+            this.b_addDatabase = new System.Windows.Forms.Button();
+            this.pb_databaseStatus = new System.Windows.Forms.PictureBox();
+            this.b_openFolder = new System.Windows.Forms.Button();
+            this.l_hotfolderStatus = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pb_databaseStatus)).BeginInit();
             this.SuspendLayout();
             // 
@@ -112,45 +116,13 @@
             // 
             this.l_databaseStatus.AutoSize = true;
             this.l_databaseStatus.BackColor = System.Drawing.SystemColors.Control;
-            this.l_databaseStatus.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l_databaseStatus.Font = new System.Drawing.Font("Arial", 10F);
             this.l_databaseStatus.ForeColor = System.Drawing.Color.Red;
-            this.l_databaseStatus.Location = new System.Drawing.Point(101, 260);
+            this.l_databaseStatus.Location = new System.Drawing.Point(100, 272);
             this.l_databaseStatus.Name = "l_databaseStatus";
-            this.l_databaseStatus.Size = new System.Drawing.Size(202, 23);
+            this.l_databaseStatus.Size = new System.Drawing.Size(165, 19);
             this.l_databaseStatus.TabIndex = 5;
             this.l_databaseStatus.Text = "No database selected";
-            // 
-            // b_addDatabase
-            // 
-            this.b_addDatabase.BackgroundImage = global::Hotfolder2Database.Properties.Resources.database_add;
-            this.b_addDatabase.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.b_addDatabase.Location = new System.Drawing.Point(441, 189);
-            this.b_addDatabase.Name = "b_addDatabase";
-            this.b_addDatabase.Size = new System.Drawing.Size(50, 50);
-            this.b_addDatabase.TabIndex = 6;
-            this.b_addDatabase.UseVisualStyleBackColor = true;
-            this.b_addDatabase.Click += new System.EventHandler(this.b_addDatabase_Click);
-            // 
-            // pb_databaseStatus
-            // 
-            this.pb_databaseStatus.Image = global::Hotfolder2Database.Properties.Resources.database_offline;
-            this.pb_databaseStatus.Location = new System.Drawing.Point(29, 250);
-            this.pb_databaseStatus.Name = "pb_databaseStatus";
-            this.pb_databaseStatus.Size = new System.Drawing.Size(66, 62);
-            this.pb_databaseStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pb_databaseStatus.TabIndex = 4;
-            this.pb_databaseStatus.TabStop = false;
-            // 
-            // b_databaseSearch
-            // 
-            this.b_databaseSearch.BackgroundImage = global::Hotfolder2Database.Properties.Resources.database_search;
-            this.b_databaseSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.b_databaseSearch.Location = new System.Drawing.Point(385, 189);
-            this.b_databaseSearch.Name = "b_databaseSearch";
-            this.b_databaseSearch.Size = new System.Drawing.Size(50, 50);
-            this.b_databaseSearch.TabIndex = 7;
-            this.b_databaseSearch.UseVisualStyleBackColor = true;
-            this.b_databaseSearch.Click += new System.EventHandler(this.b_databaseSearch_Click);
             // 
             // l_DatabasePath
             // 
@@ -186,19 +158,98 @@
             // l_imageStatus
             // 
             this.l_imageStatus.AutoSize = true;
-            this.l_imageStatus.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l_imageStatus.Font = new System.Drawing.Font("Arial", 10F);
             this.l_imageStatus.ForeColor = System.Drawing.Color.Red;
-            this.l_imageStatus.Location = new System.Drawing.Point(101, 285);
+            this.l_imageStatus.Location = new System.Drawing.Point(100, 291);
             this.l_imageStatus.Name = "l_imageStatus";
-            this.l_imageStatus.Size = new System.Drawing.Size(243, 23);
+            this.l_imageStatus.Size = new System.Drawing.Size(200, 19);
             this.l_imageStatus.TabIndex = 11;
             this.l_imageStatus.Text = "No Image type(s) selected";
+            // 
+            // tb_hotfolderPath
+            // 
+            this.tb_hotfolderPath.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.tb_hotfolderPath.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.tb_hotfolderPath.Location = new System.Drawing.Point(29, 153);
+            this.tb_hotfolderPath.Name = "tb_hotfolderPath";
+            this.tb_hotfolderPath.ReadOnly = true;
+            this.tb_hotfolderPath.Size = new System.Drawing.Size(350, 22);
+            this.tb_hotfolderPath.TabIndex = 12;
+            this.tb_hotfolderPath.Text = "Select the folder you would like to monitor";
+            // 
+            // l_hotfolderPath
+            // 
+            this.l_hotfolderPath.AutoSize = true;
+            this.l_hotfolderPath.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l_hotfolderPath.Location = new System.Drawing.Point(29, 130);
+            this.l_hotfolderPath.Name = "l_hotfolderPath";
+            this.l_hotfolderPath.Size = new System.Drawing.Size(114, 18);
+            this.l_hotfolderPath.TabIndex = 13;
+            this.l_hotfolderPath.Text = "Hotfolder path:";
+            // 
+            // b_databaseSearch
+            // 
+            this.b_databaseSearch.BackgroundImage = global::Hotfolder2Database.Properties.Resources.database_search;
+            this.b_databaseSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.b_databaseSearch.Location = new System.Drawing.Point(385, 194);
+            this.b_databaseSearch.Name = "b_databaseSearch";
+            this.b_databaseSearch.Size = new System.Drawing.Size(40, 40);
+            this.b_databaseSearch.TabIndex = 7;
+            this.b_databaseSearch.UseVisualStyleBackColor = true;
+            this.b_databaseSearch.Click += new System.EventHandler(this.b_databaseSearch_Click);
+            // 
+            // b_addDatabase
+            // 
+            this.b_addDatabase.BackgroundImage = global::Hotfolder2Database.Properties.Resources.database_add;
+            this.b_addDatabase.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.b_addDatabase.Location = new System.Drawing.Point(431, 194);
+            this.b_addDatabase.Name = "b_addDatabase";
+            this.b_addDatabase.Size = new System.Drawing.Size(40, 40);
+            this.b_addDatabase.TabIndex = 6;
+            this.b_addDatabase.UseVisualStyleBackColor = true;
+            this.b_addDatabase.Click += new System.EventHandler(this.b_addDatabase_Click);
+            // 
+            // pb_databaseStatus
+            // 
+            this.pb_databaseStatus.Image = global::Hotfolder2Database.Properties.Resources.database_offline;
+            this.pb_databaseStatus.Location = new System.Drawing.Point(29, 250);
+            this.pb_databaseStatus.Name = "pb_databaseStatus";
+            this.pb_databaseStatus.Size = new System.Drawing.Size(66, 62);
+            this.pb_databaseStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pb_databaseStatus.TabIndex = 4;
+            this.pb_databaseStatus.TabStop = false;
+            // 
+            // b_openFolder
+            // 
+            this.b_openFolder.BackgroundImage = global::Hotfolder2Database.Properties.Resources.folder_open;
+            this.b_openFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.b_openFolder.Location = new System.Drawing.Point(385, 144);
+            this.b_openFolder.Name = "b_openFolder";
+            this.b_openFolder.Size = new System.Drawing.Size(40, 40);
+            this.b_openFolder.TabIndex = 14;
+            this.b_openFolder.UseVisualStyleBackColor = true;
+            this.b_openFolder.Click += new System.EventHandler(this.b_openFolder_Click);
+            // 
+            // l_hotfolderStatus
+            // 
+            this.l_hotfolderStatus.AutoSize = true;
+            this.l_hotfolderStatus.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l_hotfolderStatus.ForeColor = System.Drawing.Color.Red;
+            this.l_hotfolderStatus.Location = new System.Drawing.Point(100, 250);
+            this.l_hotfolderStatus.Name = "l_hotfolderStatus";
+            this.l_hotfolderStatus.Size = new System.Drawing.Size(162, 19);
+            this.l_hotfolderStatus.TabIndex = 15;
+            this.l_hotfolderStatus.Text = "No hotfolder selected";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(673, 324);
+            this.Controls.Add(this.l_hotfolderStatus);
+            this.Controls.Add(this.b_openFolder);
+            this.Controls.Add(this.l_hotfolderPath);
+            this.Controls.Add(this.tb_hotfolderPath);
             this.Controls.Add(this.l_imageStatus);
             this.Controls.Add(this.l_Title);
             this.Controls.Add(this.l_instruction);
@@ -233,6 +284,10 @@
         private System.Windows.Forms.Label l_instruction;
         private System.Windows.Forms.Label l_Title;
         private System.Windows.Forms.Label l_imageStatus;
+        private System.Windows.Forms.TextBox tb_hotfolderPath;
+        private System.Windows.Forms.Label l_hotfolderPath;
+        private System.Windows.Forms.Button b_openFolder;
+        private System.Windows.Forms.Label l_hotfolderStatus;
     }
 }
 

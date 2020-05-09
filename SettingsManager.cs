@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,12 +13,29 @@ namespace Hotfolder2Database
         // Setters
         public static void SetHotfolder(string value)
         {
-            ConfigurationManager.AppSettings["Hotfolder"] = value;
+            if (Directory.Exists(value))
+            {
+                ConfigurationManager.AppSettings["Hotfolder"] = value;
+                SetDefaultHotfolderPath(Path.GetDirectoryName(value));
+            }
         }
 
         public static void SetDatabase(string value)
         {
-            ConfigurationManager.AppSettings["SelectedDatabase"] = value;
+            if (File.Exists(value))
+            {
+                ConfigurationManager.AppSettings["SelectedDatabase"] = value;
+                SetDefaultDatabasePath(Path.GetDirectoryName(value));
+            }
+        }
+        private static void SetDefaultHotfolderPath(string value)
+        {
+            ConfigurationManager.AppSettings["DefaultHotfolderPath"] = value;
+        }
+
+        private static void SetDefaultDatabasePath(string value)
+        {
+            ConfigurationManager.AppSettings["DefaultDatabasePath"] = value;
         }
 
         public static bool AddFileType(string value)
@@ -28,7 +46,7 @@ namespace Hotfolder2Database
                 var fileTypeList = ConfigurationManager.AppSettings["AcceptedFileTypes"].Split(',').ToList();
                 if (!fileTypeList.Contains(value.ToLower()))
                 {
-                    if (fileTypeList.Count == 0)
+                    if (fileTypeList.Count <= 1 && fileTypeList[0] == "")
                         ConfigurationManager.AppSettings["AcceptedFileTypes"] += value.ToLower();
                     else
                         ConfigurationManager.AppSettings["AcceptedFileTypes"] += ("," + value.ToLower());
@@ -84,6 +102,16 @@ namespace Hotfolder2Database
         public static string GetHotfolder()
         {
             return ConfigurationManager.AppSettings["Hotfolder"];
+        }
+
+        public static string GetDefaultHotfolderPath()
+        {
+            return ConfigurationManager.AppSettings["DefaultHotfolderPath"];
+        }
+
+        public static string GetDefaultDatabasePath()
+        {
+            return ConfigurationManager.AppSettings["DefaultDatabasePath"];
         }
     }
 }
