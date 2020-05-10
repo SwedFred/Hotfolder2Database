@@ -11,4 +11,6 @@ All entries will also be logged.
 
 I can't really think of any real life use of this program but I didn't anything to show on my Git and I needed an example prompto! :)
 
+Icons made by Pixel perfect and Smashicons from www.flaticon.com
+
 // Fredrik Arvidsson
