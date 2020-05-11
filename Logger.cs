@@ -16,7 +16,6 @@ namespace Hotfolder2Database
         delegate void UpdateLogCallback(string result);
         public Logger()
         {
-            // TODO: Skapa database connection
             InitializeComponent();
             FolderWatcher.WrittenToDBEvent += OnWrittenToDBEvent;
             folderWatcher.WatchFolder();
@@ -51,6 +50,12 @@ namespace Hotfolder2Database
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void b_ExitProgram_Click(object sender, EventArgs e)
+        {
+            DatabaseManager.Disconnect();
+            folderWatcher.UnWatchFolder();
         }
     }
 }

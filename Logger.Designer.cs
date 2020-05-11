@@ -68,6 +68,7 @@
             this.b_ExitProgram.TabIndex = 2;
             this.b_ExitProgram.Text = "Exit";
             this.b_ExitProgram.UseVisualStyleBackColor = false;
+            this.b_ExitProgram.Click += new System.EventHandler(this.b_ExitProgram_Click);
             // 
             // Logger
             // 

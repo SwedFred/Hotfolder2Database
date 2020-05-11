@@ -50,6 +50,12 @@ namespace Hotfolder2Database
                 watcher.EnableRaisingEvents = true;
         }
 
+        public void UnWatchFolder()
+        {
+            watcher.EnableRaisingEvents = false;
+            watcher.Dispose();
+        }
+
         private static void OnCreated(object source, FileSystemEventArgs eventArgs)
         {
             // TODO: Apply processing and move file

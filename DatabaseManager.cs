@@ -27,11 +27,11 @@ namespace Hotfolder2Database
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = @"CREATE TABLE IF NOT EXISTS [ImageMetadata] (
-                                    [ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    [Name] NVARCHAR(2048),
-                                    [Dimensions] VARCHAR(64),
-                                    [Depth] INTEGER,
-                                    [Size] INTEGER)";
+                            [ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                            [Name] NVARCHAR(2048),
+                            [Dimensions] VARCHAR(64),
+                            [Depth] INTEGER,
+                            [Size] INTEGER)";
                         connection.Open();
                         command.ExecuteNonQuery();
                         command.CommandText = "SELECT * FROM [ImageMetadata]";
@@ -101,7 +101,5 @@ namespace Hotfolder2Database
             string transactionData = now.DayOfWeek + " " + now.ToString("HH:mm:ss") + " " + Path.GetFileName(filepath);
             return transactionData;
         }
-
-        
     }
 }
