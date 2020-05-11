@@ -9,6 +9,8 @@ and the information put into a SQLite database. The files will then either be mo
 /success/ subfolder in the case of successfull parsing, or a /failed/ subfolder in the case of failure.
 All entries will also be logged.
 
+[An image of Hotfolder2Database](https://github.com/SwedFred/Hotfolder2database/bild.png)
+
 I can't really think of any real life use of this program but I didn't anything to show on my Git and I needed an example prompto! :)
 My hope is that it will give us something to discuss, and that I will learn more tricks while I refactor and expand upon the codebase.
 
