@@ -17,36 +17,37 @@ namespace Hotfolder2Database
         Listens to the user-selected folder to see if any files has been passed into it.
         If a file is of a correct type then enter the information into our database
     */
-    public class FolderWatcher : IObservable<object>
+    public class FolderWatcher
     {
-        SqliteConnection sqliteConnection;
-        List<IObserver<object>> observers;
-        FileSystemWatcher watcher;
-        List<string> filters;
+        public static event Action<string> WrittenToDBEvent;
+        public static FileSystemWatcher watcher = new FileSystemWatcher();
 
         public FolderWatcher()
         {
-            observers = new List<IObserver<object>>();
-            watcher = new FileSystemWatcher();
-            filters = ConfigurationManager.AppSettings["AcceptedFileTypes"].Split(',').ToList();
             var db = ConfigurationManager.AppSettings["SelectedDatabase"];
-            sqliteConnection = new SqliteConnection("Data Source = " + db + "; " + "Cache = Private");  //Creates a new database if given a name which doesn't already exist
+            var successDirectory = SettingsManager.GetHotfolder() + "/successful/";
+            var failDirectory = SettingsManager.GetHotfolder() + "/failed/";
+            if (!Directory.Exists(successDirectory))
+                Directory.CreateDirectory(successDirectory);
+            if (!Directory.Exists(failDirectory))
+                Directory.CreateDirectory(failDirectory);
+            DatabaseManager.ConnectToDatabase();
         }
 
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-        void WatchFolder()
+        public void WatchFolder()
         {
-            var path = ConfigurationManager.AppSettings["Hotfolder"];
-            if (path != null && Directory.Exists(path))
-                watcher.Path = ConfigurationManager.AppSettings["Hotfolder"];
-            else
-                throw new Exception("The program couldn't find the directory \"" + path + "\"");
+                var path = ConfigurationManager.AppSettings["Hotfolder"];
+                if (path != null && Directory.Exists(path))
+                    watcher.Path = ConfigurationManager.AppSettings["Hotfolder"];
+                else
+                    throw new Exception("The program couldn't find the directory \"" + path + "\"");
             
-            watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite;
-            watcher.Created += OnCreated;
-            watcher.Renamed += OnCreated;
-            watcher.IncludeSubdirectories = false;
-            watcher.EnableRaisingEvents = true;
+                watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite;
+                watcher.Created += OnCreated;
+                watcher.Renamed += OnCreated;
+                watcher.IncludeSubdirectories = false;
+                watcher.EnableRaisingEvents = true;
         }
 
         private static void OnCreated(object source, FileSystemEventArgs eventArgs)
@@ -55,25 +56,29 @@ namespace Hotfolder2Database
             var successDirectory = SettingsManager.GetHotfolder() + "/successful/";
             var failDirectory = SettingsManager.GetHotfolder() + "/failed/";
             var newfile = eventArgs.FullPath;
-            string result;
+            var filters = ConfigurationManager.AppSettings["AcceptedFileTypes"].Split(',').ToList();
 
-            if (!Directory.Exists(successDirectory))
-                Directory.CreateDirectory(successDirectory);
-            if (!Directory.Exists(failDirectory))
-                Directory.CreateDirectory(failDirectory);
-            result = DatabaseManager.WriteEntry(newfile);
-            if (result != null)
-                File.Move(newfile, successDirectory + Path.GetFileName(newfile));
-            else
-                File.Move(newfile, failDirectory + Path.GetFileName(newfile));
-
+            foreach (var filter in filters)
+            {
+                if (Path.GetExtension(newfile).Remove(0,1) == filter)                                       //Filter out the leading dot in the extension name
+                {
+                    try
+                    {
+                        var result = DatabaseManager.WriteEntry(newfile);
+                        if (result != null)
+                            File.Copy(newfile, successDirectory + Path.GetFileName(newfile));
+                        else
+                            File.Copy(newfile, failDirectory + Path.GetFileName(newfile));
+                        WrittenToDBEvent?.Invoke(result);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
+            }
         }
 
-        public IDisposable Subscribe(IObserver<object> observer)
-        {
-            if (!observers.Contains(observer))
-                observers.Add(observer);
-            return new Unsubscriber(observers, observer);
-        }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -13,6 +14,7 @@ namespace Hotfolder2Database
     static class DatabaseManager
     {
         private static SqliteConnection connection;
+
         public static void CreateDatabase(string fileAndPath)
         {
             try
@@ -22,16 +24,19 @@ namespace Hotfolder2Database
                 SettingsManager.SetDatabase(fileAndPath);
                 using (connection = new SqliteConnection("Data Source=" + fileAndPath))
                 {
-                    string commandText = @"CREATE TABLE IF NOT EXISTS [ImageMetadata] (
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = @"CREATE TABLE IF NOT EXISTS [ImageMetadata] (
                                     [ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                                     [Name] NVARCHAR(2048),
                                     [Dimensions] VARCHAR(64),
                                     [Depth] INTEGER,
                                     [Size] INTEGER)";
-                    using (var command = new SqliteCommand(commandText, connection))
-                    {
                         connection.Open();
                         command.ExecuteNonQuery();
+                        command.CommandText = "SELECT * FROM [ImageMetadata]";
+                        var reader = command.ExecuteReader();
+                        Console.WriteLine(reader.ToString());
                     }
                 }
                 connection.Close();
@@ -42,7 +47,7 @@ namespace Hotfolder2Database
             }
         }
 
-        public static void ConnectToDatabase(string fileAndPath)
+        public static void ConnectToDatabase()
         {
             try
             {
@@ -64,17 +69,22 @@ namespace Hotfolder2Database
 
         public static string WriteEntry(string filepath)
         {
+            //Name, Dimensions, Depth, Size
+            Image image = Image.FromFile(filepath);
+            var file = File.OpenRead(filepath);
+            var fileSizeInBytes = file.Length;
+            file.Close();
+
             try
             {
-                //Name, Dimensions, Depth, Size
-                Image image = Image.FromFile(filepath);
-                string insertCommand = @"INSERT INTO [ImageMetadata] 
-                                    (Name, Dimensions, Depth, Size) VALUES
-                                    (" + Path.GetFileName(filepath) + ", \""
-                                        + image.PhysicalDimension.ToString() + "\","
-                                        + Image.GetPixelFormatSize(image.PixelFormat) + ")";
-                using (var command = new SqliteCommand(insertCommand, connection))
+                using (var command = connection.CreateCommand())
                 {
+                    command.CommandText = "INSERT INTO [ImageMetadata] (Name, Dimensions, Depth, Size) VALUES (@FileName, @Resolution, @Format, @Size)";
+                    command.Parameters.Add("@FileName", Microsoft.Data.Sqlite.SqliteType.Text).Value = Path.GetFileName(filepath);
+                    command.Parameters.Add("@Resolution", SqliteType.Text).Value = image.Size.ToString();
+                    command.Parameters.Add("@Format", SqliteType.Integer).Value = Image.GetPixelFormatSize(image.PixelFormat);
+                    command.Parameters.Add("@Size", SqliteType.Integer).Value = fileSizeInBytes;
+
                     if (connection.State != System.Data.ConnectionState.Open)
                         connection.Open();
                     command.ExecuteNonQuery();
