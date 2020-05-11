@@ -39,7 +39,6 @@ namespace Hotfolder2Database
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     SettingsManager.SetDatabase(dialog.FileName);
-                    l_DatabasePath.Text = SettingsManager.GetDatabasePath();
                     tb_DatabasePath.Text = SettingsManager.GetDatabasePath();
                     tb_DatabasePath.ForeColor = Color.Black;
                     CheckStartConditions();
@@ -47,7 +46,7 @@ namespace Hotfolder2Database
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -68,7 +67,7 @@ namespace Hotfolder2Database
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -81,17 +80,15 @@ namespace Hotfolder2Database
                 dialog.Filter = "Database files (*.db)|*.db";
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    SettingsManager.SetDatabase(dialog.FileName);
-                    File.Create(dialog.FileName);
-                    // TODO: Create actual file
-                    // TODO: Set up database
-
+                    DatabaseManager.CreateDatabase(dialog.FileName);
+                    tb_DatabasePath.Text = SettingsManager.GetDatabasePath();
+                    tb_DatabasePath.ForeColor = Color.Black;
                     CheckStartConditions();
                 }
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -116,7 +113,7 @@ namespace Hotfolder2Database
 
             // Fill in databasepath
             var dataBasePath = SettingsManager.GetDatabasePath();
-            if (String.IsNullOrEmpty(dataBasePath))
+            if (!String.IsNullOrEmpty(dataBasePath))
                 tb_DatabasePath.Text = dataBasePath;
             
             // Check if we are ready to start

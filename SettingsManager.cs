@@ -56,7 +56,7 @@ namespace Hotfolder2Database
             }
             catch (Exception ex)
             {
-                // TODO: Debugger
+                Console.WriteLine(ex.ToString());
             }
 
             return wasSuccessful;
@@ -82,6 +82,7 @@ namespace Hotfolder2Database
             catch (Exception ex)
             {
                 // TODO: Debugger
+                Console.WriteLine(ex.ToString());
             }
 
 

@@ -28,11 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
-            "hej detta är en ganska lång text, men inte vansinnigt lång",
-            "korv",
-            "pizza",
-            "superjättelång text som borde ta upp minst en hel rad och kanske lite till!"}, -1);
             this.lv_logwindow = new System.Windows.Forms.ListView();
             this.l_DatabaseName = new System.Windows.Forms.Label();
             this.b_ExitProgram = new System.Windows.Forms.Button();
@@ -42,11 +37,9 @@
             // 
             this.lv_logwindow.FullRowSelect = true;
             this.lv_logwindow.HideSelection = false;
-            listViewItem1.Checked = true;
-            listViewItem1.StateImageIndex = 1;
-            this.lv_logwindow.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            this.lv_logwindow.LabelWrap = false;
             this.lv_logwindow.Location = new System.Drawing.Point(12, 46);
+            this.lv_logwindow.MultiSelect = false;
             this.lv_logwindow.Name = "lv_logwindow";
             this.lv_logwindow.Size = new System.Drawing.Size(661, 304);
             this.lv_logwindow.TabIndex = 0;
@@ -58,20 +51,23 @@
             // l_DatabaseName
             // 
             this.l_DatabaseName.AutoSize = true;
+            this.l_DatabaseName.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.l_DatabaseName.Location = new System.Drawing.Point(13, 13);
             this.l_DatabaseName.Name = "l_DatabaseName";
-            this.l_DatabaseName.Size = new System.Drawing.Size(46, 17);
+            this.l_DatabaseName.Size = new System.Drawing.Size(189, 18);
             this.l_DatabaseName.TabIndex = 1;
-            this.l_DatabaseName.Text = "label1";
+            this.l_DatabaseName.Text = "Actively logging hotfolder";
             // 
             // b_ExitProgram
             // 
+            this.b_ExitProgram.BackColor = System.Drawing.Color.Red;
+            this.b_ExitProgram.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.b_ExitProgram.Location = new System.Drawing.Point(267, 375);
             this.b_ExitProgram.Name = "b_ExitProgram";
             this.b_ExitProgram.Size = new System.Drawing.Size(144, 54);
             this.b_ExitProgram.TabIndex = 2;
-            this.b_ExitProgram.Text = "button1";
-            this.b_ExitProgram.UseVisualStyleBackColor = true;
+            this.b_ExitProgram.Text = "Exit";
+            this.b_ExitProgram.UseVisualStyleBackColor = false;
             // 
             // Logger
             // 
@@ -82,16 +78,15 @@
             this.Controls.Add(this.l_DatabaseName);
             this.Controls.Add(this.lv_logwindow);
             this.Name = "Logger";
-            this.Text = "Logger";
+            this.Text = "Hotfolder2Database Logger ";
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.ListView lv_logwindow;
         private System.Windows.Forms.Label l_DatabaseName;
         private System.Windows.Forms.Button b_ExitProgram;
+        private System.Windows.Forms.ListView lv_logwindow;
     }
 }

@@ -15,12 +15,14 @@ namespace Hotfolder2Database
         FolderWatcher folderWatcher = new FolderWatcher();
         public Logger()
         {
+            // TODO: Skapa database connection
             InitializeComponent();
         }
 
+
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            
         }
     }
 }

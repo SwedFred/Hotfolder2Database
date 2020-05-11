@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +52,21 @@ namespace Hotfolder2Database
         private static void OnCreated(object source, FileSystemEventArgs eventArgs)
         {
             // TODO: Apply processing and move file
+            var successDirectory = SettingsManager.GetHotfolder() + "/successful/";
+            var failDirectory = SettingsManager.GetHotfolder() + "/failed/";
+            var newfile = eventArgs.FullPath;
+            string result;
+
+            if (!Directory.Exists(successDirectory))
+                Directory.CreateDirectory(successDirectory);
+            if (!Directory.Exists(failDirectory))
+                Directory.CreateDirectory(failDirectory);
+            result = DatabaseManager.WriteEntry(newfile);
+            if (result != null)
+                File.Move(newfile, successDirectory + Path.GetFileName(newfile));
+            else
+                File.Move(newfile, failDirectory + Path.GetFileName(newfile));
+
         }
 
         public IDisposable Subscribe(IObserver<object> observer)
