@@ -65,7 +65,7 @@ namespace Hotfolder2Database
                     try
                     {
                         var result = DatabaseManager.WriteEntry(newfile);
-                        if (result != null)
+                        if (!string.IsNullOrEmpty(result))
                             File.Copy(newfile, successDirectory + Path.GetFileName(newfile));
                         else
                             File.Copy(newfile, failDirectory + Path.GetFileName(newfile));
@@ -73,7 +73,7 @@ namespace Hotfolder2Database
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.ToString());
+                        Console.WriteLine("OnCreated method: " + ex.ToString());
                     }
                 }
             }

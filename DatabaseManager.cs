@@ -43,7 +43,7 @@ namespace Hotfolder2Database
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine("CreateDatabase method: " + ex.ToString());
             }
         }
 
@@ -56,7 +56,7 @@ namespace Hotfolder2Database
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine("ConnectToDatabaseMethod: " + ex.ToString());
             }
 
         }
@@ -69,14 +69,16 @@ namespace Hotfolder2Database
 
         public static string WriteEntry(string filepath)
         {
-            //Name, Dimensions, Depth, Size
-            Image image = Image.FromFile(filepath);
-            var file = File.OpenRead(filepath);
-            var fileSizeInBytes = file.Length;
-            file.Close();
+            if (!File.Exists(filepath))
+                return "";
 
             try
             {
+                Image image = Image.FromFile(filepath);
+                var file = File.OpenRead(filepath);
+                var fileSizeInBytes = file.Length;
+                file.Close();
+
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = "INSERT INTO [ImageMetadata] (Name, Dimensions, Depth, Size) VALUES (@FileName, @Resolution, @Format, @Size)";
@@ -92,11 +94,11 @@ namespace Hotfolder2Database
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                Console.WriteLine("WriteEntry method fail: " + ex.ToString());
             }
 
             DateTime now = DateTime.Now;
-            string transactionData = now.ToString("dd HH:mm:ss") + " " + Path.GetFileName(filepath);
+            string transactionData = now.DayOfWeek + " " + now.ToString("HH:mm:ss") + " " + Path.GetFileName(filepath);
             return transactionData;
         }
 

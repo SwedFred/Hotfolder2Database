@@ -56,7 +56,7 @@ namespace Hotfolder2Database
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine("AddFileType method: " + ex.ToString());
             }
 
             return wasSuccessful;
@@ -82,7 +82,7 @@ namespace Hotfolder2Database
             catch (Exception ex)
             {
                 // TODO: Debugger
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine("RemoveFileType method: " + ex.ToString());
             }
 
 
